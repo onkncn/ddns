@@ -1,0 +1,10 @@
+{
+    "access_key_id": "your_access_key_id",
+    "access_key_secret": "your_access_key_secret",
+    "domain_name": "example.com",
+    "rr": "@",
+    "record_type": "A",
+    "ttl": 600,
+    "ip_file": "/tmp/ddns_current_ip.txt",
+    "log_level": "INFO"
+}
