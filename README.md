@@ -120,6 +120,64 @@ export DDNS_DOMAIN_NAME=example.com
 python src/ddns.py
 ```
 
+## Docker执行方式
+
+### 方式一：使用Docker直接运行
+
+#### 1. 构建Docker镜像
+
+```bash
+docker build -t ddns-tool .
+```
+
+#### 2. 运行Docker容器
+
+使用环境变量配置：
+
+```bash
+docker run -d --name ddns \
+  -e ACCESS_KEY_ID=your_access_key_id \
+  -e ACCESS_KEY_SECRET=your_access_key_secret \
+  -e DOMAIN_NAME=example.com \
+  -e RR=@ \
+  -e RECORD_TYPE=A \
+  --restart unless-stopped \
+  ddns-tool
+```
+
+或使用配置文件（先创建config目录并放入config.json）：
+
+```bash
+mkdir -p config
+cp config_example.json config/config.json
+# 编辑config/config.json添加配置
+
+docker run -d --name ddns \
+  -v $(pwd)/config:/app/config \
+  --restart unless-stopped \
+  ddns-tool
+```
+
+### 方式二：使用Docker Compose运行
+
+#### 1. 准备配置
+
+编辑docker-compose.yml文件中的环境变量，或创建config目录并放入config.json：
+
+```bash
+mkdir -p config
+cp config_example.json config/config.json
+# 编辑config/config.json添加配置
+```
+
+#### 2. 使用Docker Compose启动
+
+```bash
+docker-compose up -d
+```
+
+Docker Compose将自动构建镜像并按照配置启动容器，默认每5分钟检查并更新IP。
+
 ## 定时运行设置
 
 ### Linux/MacOS (使用crontab)
