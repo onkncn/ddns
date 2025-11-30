@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  ddns:
+    build: .
+    image: ddns-tool
+    restart: unless-stopped
+    # 可以通过环境变量设置配置
+    # environment:
+    #   - ACCESS_KEY_ID=your_key
+    #   - ACCESS_KEY_SECRET=your_secret
+    #   - DOMAIN_NAME=example.com
+    #   - RR=@
+    #   - RECORD_TYPE=A
+    volumes:
+      # 挂载配置文件目录，用户可以将config.json放在./config目录下
+      - ./config:/app/config
+    # 可以设置定时任务，默认配置为每5分钟执行一次
+    command: >
+      /bin/sh -c "
+        while true; do
+          python src/ddns.py config/config.json;
+          sleep 300;
+        done
+      "
